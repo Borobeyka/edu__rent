@@ -1,0 +1,14 @@
+CREATE FUNCTION estimates_payed_updater()
+RETURNS trigger
+AS $$
+    BEGIN
+        IF (NEW.is_payed = true AND OLD.is_payed) THEN
+            NEW.payed_date = NOW();
+        END IF;
+        RETURN NEW;
+    END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER estimates_payed_updater BEFORE INSERT OR UPDATE ON estimates
+    FOR EACH ROW EXECUTE PROCEDURE estimates_payed_updater();

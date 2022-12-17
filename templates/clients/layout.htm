@@ -1,0 +1,25 @@
+{% extends "/layout.htm" %}
+
+{% block body %}
+    <h3>{{ client.surname }} {{ client.name }}</h3>
+    <hr>
+    <div class="row">
+        <div class="col-3">
+            <div class="btn-group-vertical w-100 mb-3">
+                <a href="{{ url_for('clients_show', client_id=client.id) }}"
+                    class="btn btn btn-secondary d-flex {{ 'active' if url_for('clients_show', client_id=client.id) == request.path }}">
+                    <i class="bi bi-person-rolodex light me-2 align-self-start"></i>
+                    <span class="light w-100">Личная информация</span>
+                </a>
+                <a href="{{ url_for('clients_estimates', client_id=client.id) }}"
+                    class="btn btn btn-secondary d-flex {{ 'active' if url_for('clients_estimates', client_id=client.id) == request.path }}">
+                    <i class="bi bi-journal-text light me-2 align-self-start"></i>
+                    <span class="light w-100">Сметы</span>
+                </a>
+            </div>
+        </div>
+        <div class="col mb-3">
+            {% block clients_body %}{% endblock %}
+        </div>
+    </div>
+{% endblock %}

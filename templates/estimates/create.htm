@@ -1,0 +1,105 @@
+{% extends "/layout.htm" %}
+
+{% block title %}
+    Создание сметы
+{% endblock %}
+
+{% block body %}
+    <h3>Создание сметы</h3>
+    <p class="fst-italic text-muted">
+        Вы находитесь в режиме создания сметы<br>
+        Для добавления оборудования в смету нажмите соответсвующую кнопку
+    </p>
+    <hr>
+
+    <form method="POST" class="mb-3">
+        {{ form.hidden_tag() }}
+        {% for field in form if field.name not in ["csrf_token", "create_submit"] %}
+            {% if field.errors %}
+                {% for error in field.errors %}
+                    <div class="alert alert-danger" role="alert">{{ error }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+        <div class="row">
+            {% for field in form if field.name not in ["csrf_token", "create_submit"] %}
+                <div class="col-6 mb-3 d-flex align-items-baseline">
+                    <div class="input-group">
+                        {{ field.label(class="input-group-text") }}
+                        {{ field(class="form-control") }}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <a href="{{ url_for('storage', is_estimate=true) }}" class="btn btn-primary btn-sm mb-3">
+            <i class="bi bi-file-earmark-plus text-light me-1"></i>
+            Добавить оборудование
+        </a>
+
+        <table class="table table-bordered table-hover table-striped" >
+            <thead>
+                <tr>
+                    <th scope="col" style="font-size:.8rem">Название</th>
+                    <th scope="col" style="font-size:.8rem">Категория</th>
+                    <th scope="col" style="font-size:.8rem">Описание</th>
+                    <th scope="col" style="font-size:.8rem">Устанавливается на</th>
+                    <th scope="col" style="font-size:.8rem">Стоимость / сутки (₽)</th>
+                    <th scope="col" style="font-size:.8rem">Количество</th>
+                    <th scope="col" style="font-size:.8rem">Всего (₽)</th>
+                    <th scope="col" style="font-size:.8rem">Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if equipments: %}
+                    {% for equipment in equipments: %}
+                    <tr>
+                        <td style="font-size:.8rem">{{ equipment.item.title }}</td>
+                        <td style="font-size:.8rem">{{ equipment.item.category }}</td>
+                        <td class="text-truncate" style="max-width: 150px; font-size:.8rem">
+                            {% if equipment.item.description %}
+                                {{ equipment.item.description }}
+                            {% endif %}
+                        </td style="font-size:.8rem">
+                        <td class="text-truncate" style="max-width: 200px">
+                            {% if equipment.item.parent_id %}
+                                <a href="#" class="link-primary" style="font-size:.8rem">
+                                    {{ equipment.item.parent_title }}
+                                </a>
+                            {% endif %}
+                        </td>
+                        <td style="font-size:.8rem">
+                            {{ equipment.item.price }}
+                        </td>
+                        <td>
+                            <div class="d-flex justify-content-around" style="height:100%; font-size:.8rem">
+                                <a href="{{ url_for('estimates_create', equipment_id=equipment.item.id, minus=true) }}" class="btn btn-sm" style="padding:0;">
+                                    <i class="bi bi-dash-square"></i>
+                                </a>
+                                {{ equipment.count }}
+                                <a href="{{ url_for('estimates_create', equipment_id=equipment.item.id) }}" class="btn btn-sm" style="padding:0">
+                                    <i class="bi bi-plus-square"></i>
+                                </a>
+                            </div>
+                        </td>
+                        <td style="font-size:.8rem">
+                            {{ equipment.item.price * equipment.count }}
+                        </td>
+                        
+                        <td class="text-center">
+                            <a href="{{ url_for('storage_show', equipment_id=equipment.item.id) }}" class="btn btn-success btn-sm" title="Просмотр">
+                                <i class="bi bi-eye light"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
+
+        {{ form.create_submit(class="btn btn-success w-100 mb-3") }}
+        <a href="{{ url_for('estimates_create_reset') }}" class="btn btn-secondary w-100">
+            Выйти из режима создания сметы
+        </a>
+    </form>
+{% endblock %}

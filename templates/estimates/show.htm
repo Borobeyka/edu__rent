@@ -1,0 +1,73 @@
+{% extends "/layout.htm" %}
+
+{% block title %}
+    {{ estimate.project }} от {{ estimate.start_date }}
+{% endblock %}
+
+{% block body %}
+    {% for category, text in get_flashed_messages(True) %}
+        <div class="alert alert-{{ category }}">{{ text }}</div>  
+    {% endfor %}
+
+    <h3>{{ estimate.project }} <strong>[{{ estimate.start_date }}]</strong></h3><hr>
+
+    <b>Дата создания сметы:</b> {{ estimate.create_date }} <br>
+    <b>Дата выдачи оборудования:</b> {{ estimate.start_date }} <br>
+    <b>Дата возврата (ориентировочно):</b> {{ estimate.close_date }} <br>
+    <b>Клиент:</b>
+        <a href="{{ url_for('clients_show', client_id=estimate.client_id) }}" class="link-primary">
+            {{ estimate.client_surname }} {{ estimate.client_name }}
+        </a>
+    <br>
+    <b>Комментарий:</b>
+        {% if estimate.comment %}
+            {{ estimate.comment }}
+        {% else %}
+            Комментарий отсутсвует
+        {% endif %}
+    <br>
+    <b>Статус сметы:</b>
+    {% if estimate.is_payed %}
+        <label class="btn btn-success btn-sm">Оплачена</label><br>
+        <b>Дата оплаты:</b> {{ estimate.payed_date }} <br>
+    {% else %}
+        <label class="btn btn-danger btn-sm">Ожидает оплаты</label><br>
+    {% endif %} 
+    <hr>
+    <h3>Перечень оборудования</h3>
+    <table class="table table-bordered table-hover table-striped">
+        <thead>
+            <tr>
+                <th scope="col" style="font-size:.8rem">Название</th>
+                <th scope="col" style="font-size:.8rem">Количество</th>
+                <th scope="col" style="font-size:.8rem">Стоимость (₽)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if equipments: %}
+                {% for equipment in equipments: %}
+                <tr>
+                    <td>
+                        <a href="{{ url_for('storage_show', equipment_id=equipment.equipment_id) }}" class="link-primary" style="font-size:.8rem"> 
+                            {{ equipment.equipment_title }}
+                        </a>
+                    </td>
+                    <td style="font-size:.8rem">
+                        {{ equipment.count }}
+                    </td>
+                    <td style="font-size:.8rem">
+                        {{ equipment.price }}
+                    </td>
+                </tr>
+                {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
+    <hr>
+    {% if not estimate.is_payed %}
+        <a href="{{ url_for('estimates_payed', estimate_id=estimate.id) }}" class="btn btn-success btn-sm mt-2 mb-3" title="Оплачено">
+            <i class="bi bi-cash light me-1"></i>
+            Оплачено
+        </a>
+    {% endif %}
+{% endblock %}

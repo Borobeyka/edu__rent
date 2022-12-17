@@ -1,0 +1,93 @@
+.header {
+  width: 100%;
+  padding: 10px 20px;
+  border-radius: 15px;
+  box-shadow: 0 0 5px #1C1C1C;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #073b4c;
+  margin-bottom: 25px;
+}
+.header .logotype {
+  text-decoration: none;
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: #DC3545;
+  margin-right: 50px;
+  transition: 0.3s all;
+}
+.header .logotype:hover {
+  text-shadow: 1px 1px 10px #118ab2;
+}
+.header .items {
+  flex-grow: 1;
+  display: flex;
+  justify-content: start;
+}
+.header .items .item {
+  color: aliceblue;
+  font-size: 1.1rem;
+  padding: 5px 35px;
+  text-decoration: none;
+  margin-right: 20px;
+  border-radius: 20px;
+  transition: 0.3s all;
+}
+.header .items .item:hover {
+  background-color: #118ab2;
+}
+.header .items .active {
+  background-color: #118ab2;
+}
+.header .profile {
+  display: flex;
+  align-items: center;
+}
+.header .profile * {
+  margin-right: 7px;
+}
+.header .profile i {
+  font-size: 24px;
+  color: aliceblue;
+}
+.header .profile .username {
+  color: aliceblue;
+  text-decoration: none;
+}
+.light {
+  color: #fff;
+}
+.component {
+  padding: 10px 20px;
+  border-radius: 15px;
+  box-shadow: 0 0 5px #1C1C1C;
+  margin-bottom: 25px;
+}
+.router {
+  background-color: gainsboro;
+}
+.content {
+  background-color: #fff;
+  padding-top: 15px;
+}
+.content .container {
+  padding: 0;
+}
+.alert:empty {
+  display: none;
+}
+.footer {
+  background-color: #f5f3f4;
+}
+* {
+  padding: 0;
+  margin: 0;
+  font-family: 'Roboto Condensed', sans-serif;
+  font-size: 14pt;
+  color: #1C1C1C;
+}
+body {
+  padding-top: 1rem;
+  background-color: #e7ecef;
+}

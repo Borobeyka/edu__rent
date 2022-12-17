@@ -1,0 +1,39 @@
+CREATE OR REPLACE FUNCTION get_filtered_estimates (_start_date TIMESTAMP,
+										  _close_date TIMESTAMP,
+										  _client_id INTEGER)
+RETURNS TABLE (
+	id integer,
+	creator_id integer,
+	client_id integer,
+	project varchar,
+	start_date timestamp,
+	close_date timestamp,
+	comment varchar,
+	payed_date timestamp,
+	is_payed boolean,
+	create_date timestamp,
+	client_name varchar,
+	client_surname varchar,
+	creator_login varchar
+) 
+AS $$
+DECLARE
+    statement TEXT;
+BEGIN
+	statement := 'SELECT e.*, c.name client_name, c.surname client_surname, u.login FROM estimates e LEFT JOIN clients c ON c.id = e.client_id
+	LEFT JOIN users u ON u.id = e.creator_id WHERE 1=1 AND';
+	IF (_start_date IS NOT NULL) THEN
+		statement := format('%s CAST(e.start_date as DATE) = CAST(%L as DATE) AND', statement, _start_date);
+	END IF;
+	IF (_close_date IS NOT NULL) THEN
+		statement := format('%s CAST(e.close_date as DATE) = CAST(%L as DATE) AND', statement, _close_date);
+	END IF;
+	IF (_client_id IS NOT NULL) THEN
+		statement := format('%s e.client_id = %L AND', statement, _client_id);
+		
+	END IF;
+	statement := format('%s 1=1 ORDER BY e.start_date DESC;', statement);
+	RETURN QUERY EXECUTE statement;
+END;
+$$ 
+LANGUAGE 'plpgsql';

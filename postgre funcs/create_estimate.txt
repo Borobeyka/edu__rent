@@ -1,0 +1,17 @@
+create or replace FUNCTION create_estimate(
+	creator_id integer,
+	client_id integer,
+	project varchar,
+	start_date timestamp,
+	close_date timestamp,
+	comment varchar
+)
+RETURNS table (
+	new_id integer
+)
+as $$
+begin
+    return query INSERT INTO estimates VALUES(DEFAULT, creator_id, client_id, project, start_date, close_date, comment) RETURNING id;
+end;
+$$
+language plpgsql  

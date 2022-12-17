@@ -1,0 +1,20 @@
+CREATE OR REPLACE FUNCTION get_estimates_details_by_id(_estimate_id integer)
+RETURNS TABLE (
+	id integer,
+	estimate_id integer,
+	equipment_id integer,
+	price_id integer,
+	count integer,
+	equipment_title varchar,
+	price real
+) 
+AS $$
+DECLARE
+    statement TEXT;
+BEGIN
+	statement := format('SELECT ed.*, e.title, p.price FROM estimates_details ed LEFT JOIN equipments e ON e.id = ed.equipment_id
+		LEFT JOIN prices p ON p.id = ed.price_id WHERE ed.estimate_id = %L', _estimate_id);
+	RETURN QUERY EXECUTE statement;
+END;
+$$ 
+LANGUAGE 'plpgsql';

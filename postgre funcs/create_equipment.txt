@@ -1,0 +1,16 @@
+create or replace FUNCTION create_equipment(
+	parent_id integer,
+	title varchar,
+	category_id integer,
+	description varchar,
+	images varchar[]
+)
+RETURNS table (
+	new_id integer
+)
+as $$
+begin
+    return query INSERT INTO equipments VALUES(DEFAULT, parent_id, title, category_id, description, images, DEFAULT) RETURNING id;
+end;
+$$
+language plpgsql  

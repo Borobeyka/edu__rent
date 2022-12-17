@@ -1,0 +1,34 @@
+{% extends "/layout.htm" %}
+
+{% block title %}
+    Редактирование {{ estimate.project }}
+{% endblock %}
+
+{% block body %}
+    <h3>Редактирование</h3>
+    <h5>{{ estimate.title }}</h5>
+    <hr>
+    
+
+    <form action="" method="POST">
+        {{ form.hidden_tag() }}
+        {% for field in form if field.name not in ["csrf_token", "edit_submit"] %}
+            {% if field.errors %}
+                {% for error in field.errors %}
+                    <div class="alert alert-danger" role="alert">{{ error }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+        <div class="row">
+            {% for field in form if field.name not in ["csrf_token", "edit_submit"] %}
+                <div class="col-6 mb-3 d-flex align-items-baseline">
+                    <div class="input-group">
+                        {{ field.label(class="input-group-text") }}
+                        {{ field(class="form-control") }}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        {{ form.edit_submit(class="btn btn-success w-100 mb-3") }}
+    </form>
+{% endblock %}

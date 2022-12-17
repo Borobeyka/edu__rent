@@ -1,0 +1,15 @@
+CREATE FUNCTION equipments_update_checker()
+RETURNS trigger
+AS $$
+    BEGIN
+        IF (NEW.title = OLD.title AND NEW.parent_id = OLD.parent_id AND NEW.category_id = OLD.category_id AND
+			NEW.description = OLD.description) THEN
+            RAISE EXCEPTION 'Нет изменений для обновления';
+        END IF;
+        RETURN NEW;
+    END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER equipments_update_checker BEFORE INSERT OR UPDATE ON equipments
+    FOR EACH ROW EXECUTE PROCEDURE equipments_update_checker();

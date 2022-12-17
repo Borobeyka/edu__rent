@@ -1,0 +1,71 @@
+{% extends "/layout.htm" %}
+
+{% block title %}
+    {{ equipment.title }}
+{% endblock %}
+
+{% block body %}
+
+    <h3>{{ equipment.title }}</h3>
+    <hr>
+
+    {% for category, text in get_flashed_messages(True) %}
+        <div class="alert alert-{{ category }}">{{ text }}</div>  
+    {% endfor %}
+
+    <div id="carouselExampleControls" class="carousel slide mb-3" data-bs-ride="carousel" style="max-width:350px; max-height:500px;">
+        <div class="carousel-inner">
+            {% if equipment.images %}
+                {% for image in equipment.images %}
+                    <div class="carousel-item {{ 'active' if loop.first else '' }}">                    
+                        <img src="{{ image }}" class="d-block w-100" style="max-width:350px; max-height:500px;">
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="carousel-item active">
+                    <img src="https://via.placeholder.com/1920x1080?text=Изображение отсутсвует" class="d-block w-100">
+                </div>
+            {% endif %}
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Назад</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Далее</span>
+        </button>
+    </div>
+
+    <h5>Описание</h5>
+    <div class="container mb-3">
+        {% if equipment.description %}
+            {{ equipment.description }}
+        {% else %}
+            Описание отсутствует
+        {% endif %}
+    </div>
+
+    <h5>Остаток на складе</h5>
+    <div class="container mb-3">
+        {% if equipment.count > 0 %}
+            <b>{{ equipment.count }}</b> штук(и)
+        {% else %}
+            В данный момент отсутствует на складе
+        {% endif %}
+    </div>
+
+    <h5>Стоимость (сутки)</h5>
+    <div class="container mb-3">
+        <b>{{ equipment.price }}</b> ₽
+    </div>
+
+    <a href="{{ url_for('estimates_create', equipment_id=equipment.id) }}" class="btn btn-success mb-3">
+        <i class="bi bi-clipboard2-plus light"></i>
+        Добавить в смету
+    </a>
+    <a href="{{ url_for('storage_edit', equipment_id=equipment.id) }}" class="btn btn-secondary mb-3">
+        <i class="bi bi-pencil-square light"></i>
+        Редактировать
+    </a>
+{% endblock %}

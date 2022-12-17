@@ -1,0 +1,118 @@
+users:
+    id
+    login ( 32 )
+    password ( 256 )
+    role ??
+
+clients:
+    id
+    name ( 32 )
+    surname ( NULL , 32 )
+    phone ( 11 )
+    telegram ( NULL , 64 )
+    comment ( NULL , 128 )
+    discount ( NULL , 0 )
+
+passports_data:
+    id
+    client_id
+    series ( 4 )
+    number ( 6 )
+    issued_by ( 64 )
+    issue_date
+    division_code ( 7 )
+    registration_address ( 128 )
+
+categories:
+    id
+    parent_id ( NULL )
+    title ( 128 )
+
+equipments:
+    id
+    parent_id ( NULL )
+    title ( 128 )
+    category_id
+    description ( "Описание отсутствует" , NULL , 2048 )
+    images [] ( NULL , 128 )
+    count
+
+prices: 
+    id
+    equipment_id
+    price ( NULL )
+    change_date ( NOW() )
+
+estimates:
+    id
+    creator_id
+    client_id
+    project ( NULL , 32)
+    create_date ( NULL , NOW() )
+    start_date
+    close_date
+    comment ( NULL , 128 )
+    payed_date ( NULL )
+    is_payed( NULL , false)
+
+estimates_details:
+    id
+    estimate_id
+    equipment_id
+    price_id
+    count ( NULL , 1 )
+
+
+
+
+
+
+
+
+
+CREATE ROLE Owner LOGIN;
+CREATE ROLE Storer LOGIN;
+
+
+# For SELECT
+GRANT SELECT ON
+    users,
+    clients,
+    categories,
+    equipments,
+    prices,
+    estimates,
+    estimates_details
+TO Owner, Storer;
+GRANT SELECT ON passports_data TO Owner;
+
+# For update
+GRANT UPDATE ON
+    clients,
+    passports_data,
+    prices
+TO Owner;
+GRANT UPDATE (
+    parent_id,
+    title,
+    category_id,
+    description,
+    count
+) ON equipments
+TO Owner;
+
+# For insert
+GRANT INSERT ON
+    clients,
+    passports_data,
+    equipments,
+    prices,
+    estimates,
+    estimates_details
+TO Owner;
+
+# For delete
+GRANT DELETE ON
+    estimates,
+    estimates_details
+TO Owner;

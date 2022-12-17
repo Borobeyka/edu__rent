@@ -1,0 +1,33 @@
+{% extends "/layout.htm" %}
+
+{% block title %}
+    Добавление клиента
+{% endblock %}
+
+{% block body %}
+    <h3>Добавление клиента</h3><hr>
+
+    <form action="" method="POST">
+        {{ form.hidden_tag() }}
+        {% for field in form if field.name not in ["csrf_token", "create_submit"] %}
+            {% if field.errors %}
+                {% for error in field.errors %}
+                    <div class="alert alert-danger" role="alert">{{ error }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+        <div class="row mb-2">
+            {% for field in form if field.name not in ["csrf_token", "create_submit"] %}
+                <div class="col-4 mb-3">
+                    <div class="input-group">
+                        {{ field.label(class="input-group-text") }}
+                        {{ field(class="form-control") }}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="col text-center mb-2">
+            {{ form.create_submit(class="btn btn-success px-5") }}
+        </div>
+    </form>
+{% endblock %}

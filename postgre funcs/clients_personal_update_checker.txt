@@ -1,0 +1,15 @@
+CREATE FUNCTION clients_personal_update_checker()
+RETURNS trigger
+AS $$
+    BEGIN
+        IF (NEW.name = OLD.name AND NEW.surname = OLD.surname AND NEW.phone = OLD.phone AND
+			NEW.telegram = OLD.telegram AND NEW.comment = OLD.comment AND NEW.discount = OLD.discount) THEN
+            RAISE EXCEPTION 'Нет изменений для обновления';
+        END IF;
+        RETURN NEW;
+    END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER clients_personal_update_checker BEFORE INSERT OR UPDATE ON clients
+    FOR EACH ROW EXECUTE PROCEDURE clients_personal_update_checker();

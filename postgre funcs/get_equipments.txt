@@ -1,0 +1,31 @@
+CREATE OR REPLACE FUNCTION get_equipments(
+	cat_id integer,
+	query varchar
+)
+RETURNS TABLE (
+	id integer,
+	parent_id integer,
+	title varchar,
+	category_id integer,
+	description varchar,
+	images varchar[],
+	count integer,
+	category varchar,
+	parent_title varchar,
+	price real
+) 
+AS $$
+DECLARE
+    statement TEXT;
+BEGIN
+	statement := 'SELECT e.*, c.title, ee.title, pp.price FROM equipments e LEFT JOIN categories c ON c.id = e.category_id LEFT JOIN equipments ee
+	ON ee.id = e.parent_id LEFT JOIN (SELECT tmp.price, tmp.equipment_id FROM (SELECT price, equipment_id, row_number() OVER 
+	(PARTITION BY equipment_id ORDER BY change_date DESC) AS rn FROM prices ) tmp WHERE tmp.rn = 1) pp ON pp.equipment_id = e.id WHERE 1=1 AND';
+	IF (cat_id > -1) THEN
+		statement := format('%s e.category_id = %L AND', statement, cat_id);
+	END IF;
+	statement := format('%s e.title ILIKE ''%%%s%%'' ORDER BY ee.title;', statement, query);
+	RETURN QUERY EXECUTE statement;
+END;
+$$ 
+LANGUAGE 'plpgsql';

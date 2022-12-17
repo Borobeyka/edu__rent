@@ -1,0 +1,17 @@
+create or replace FUNCTION create_client(
+	name varchar,
+	surname varchar,
+	phone varchar,
+	telegram varchar,
+	comment varchar,
+	discount integer
+)
+RETURNS table (
+	new_id integer
+)
+as $$
+begin
+    return query INSERT INTO clients VALUES(DEFAULT, name, surname, phone, telegram, comment, discount) RETURNING id;
+end;
+$$
+language plpgsql  

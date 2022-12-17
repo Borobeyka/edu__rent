@@ -1,0 +1,23 @@
+CREATE OR REPLACE FUNCTION get_client_by_id(client_id integer)
+RETURNS TABLE (
+	id integer,
+	name varchar,
+	surname varchar,
+	phone varchar,
+	telegram varchar,
+	comment varchar,
+	discount integer,
+	series varchar,
+	number varchar,
+	issued_by varchar,
+	issue_date date,
+	division_code varchar,
+	registration_address varchar
+) 
+AS $$
+BEGIN
+	RETURN QUERY EXECUTE format('SELECT c.*, pd.series, pd.number, pd.issued_by, pd.issue_date, pd.division_code,
+		pd.registration_address FROM clients c LEFT JOIN passports_data pd ON pd.client_id=c.id WHERE c.id = %L', client_id);
+END;
+$$ 
+LANGUAGE 'plpgsql';

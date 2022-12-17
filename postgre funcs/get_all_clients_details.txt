@@ -1,0 +1,44 @@
+CREATE OR REPLACE FUNCTION get_all_clients_details(field_name varchar,
+												  query varchar,
+												  is_payed boolean)
+RETURNS TABLE (
+	id integer,
+	name varchar,
+	surname varchar,
+	phone varchar,
+	telegram varchar,
+	comment varchar,
+	discount integer,
+	active_estimates bigint,
+	total_estimates bigint
+) 
+AS $$
+DECLARE
+    statement TEXT;
+BEGIN
+	statement := 'SELECT c.*, count(e.id) as active_estimates, coalesce(te.total_estimates, 0)
+	as total_estimate FROM clients c LEFT JOIN estimates e ON e.client_id = c.id AND
+	e.is_payed = false LEFT JOIN ( SELECT count(ee.id) as total_estimates, ee.client_id from
+	estimates ee group by ee.client_id ) te ON te.client_id = c.id WHERE 1=1 AND';
+	IF (field_name = 'all') THEN
+		statement := format('%s c.name ILIKE ''%%%s%%'' OR c.surname ILIKE ''%%%s%%'' OR c.phone ILIKE ''%%%s%%'' OR c.telegram ILIKE ''%%%s%%'' OR c.comment ILIKE ''%%%s%%'' AND', statement, query, query, query, query, query);
+	ELSIF (field_name = 'name' and LENGTH(query) != 0) THEN
+		statement := format('%s c.name ILIKE ''%%%s%%'' OR c.surname ILIKE ''%%%s%%'' AND', statement, query, query);
+	ELSIF (field_name = 'phone' and LENGTH(query) != 0) THEN
+		statement := format('%s c.phone ILIKE ''%%%s%%'' AND', statement, query);
+	ELSIF (field_name = 'telegram' and LENGTH(query) != 0) THEN
+		statement := format('%s c.telegram ILIKE ''%%%s%%'' AND', statement, query);
+	ELSIF (field_name = 'comment' and LENGTH(query) != 0) THEN
+		statement := format('%s c.comment ILIKE ''%%%s%%'' AND', statement, query);
+	END IF;
+	
+	IF (is_payed = TRUE) THEN
+		statement := format('%s 1=1 GROUP BY c.id, te.total_estimates having count(e.*) > 0 ORDER BY c.id;', statement);
+	ELSE
+		statement := format('%s 1=1 GROUP BY c.id, te.total_estimates ORDER BY c.id;', statement);
+	END IF;
+	
+	RETURN QUERY EXECUTE statement;
+END;
+$$ 
+LANGUAGE 'plpgsql';

@@ -1,0 +1,12 @@
+create or replace PROCEDURE create_estimate_details(
+	estimate_id integer,
+	equipment_id integer,
+	price_id integer,
+	count integer
+)
+as $$
+begin
+    INSERT INTO estimates_details VALUES(DEFAULT, estimate_id, equipment_id, price_id, count);
+end;
+$$
+language plpgsql;

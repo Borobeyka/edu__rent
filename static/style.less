@@ -1,0 +1,123 @@
+// compress: false
+
+// ***** Defaults *****
+
+@default-font-family: 'Roboto Condensed', sans-serif;
+@default-font-size: 14pt;
+@default-font-color: #1C1C1C;
+
+@color-blue: #118ab2;
+
+
+.header {
+    width: 100%;
+    padding: 10px 20px;
+    border-radius: 15px;
+    box-shadow: 0 0 5px #1C1C1C;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #073b4c;
+    margin-bottom: 25px;
+
+    .logotype {
+        text-decoration: none;
+        font-size: 2.2rem;
+        font-weight: bold;
+        color: #DC3545;
+        margin-right: 50px;
+        transition: .3s all;
+
+        &:hover {
+            text-shadow: 1px 1px 10px @color-blue;
+        }
+    }
+
+    .items {
+        flex-grow: 1;
+        display: flex;
+        justify-content: start;
+
+        .item {
+            color: aliceblue;
+            font-size: 1.1rem;
+            padding: 5px 35px;
+            text-decoration: none;
+            margin-right: 20px;
+            border-radius: 20px;
+            transition: .3s all;
+
+            &:hover {
+                background-color: @color-blue;
+            }
+        }
+
+        .active {
+            background-color: @color-blue;
+        }
+    }
+
+    .profile {
+        display: flex;
+        align-items: center;
+        
+        * {
+            margin-right: 7px;
+        }
+        
+        i {
+            font-size: 24px;
+            color: aliceblue;
+        }
+
+        .username {
+            color:aliceblue;
+            text-decoration: none;
+        }
+    }
+}
+
+.light {
+    color: #fff;
+}
+
+.component {
+    padding: 10px 20px;
+    border-radius: 15px;
+    box-shadow: 0 0 5px #1C1C1C;
+    margin-bottom: 25px;
+}
+
+.router {
+    background-color: gainsboro;
+}
+
+.content {
+    background-color: #fff;
+    padding-top: 15px;
+    
+    .container {
+        padding: 0;
+    }
+}
+
+.alert:empty {
+    display: none;
+}
+
+.footer {
+    background-color: #f5f3f4;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    font-family: @default-font-family;
+    font-size: @default-font-size;
+    color: @default-font-color;
+}
+
+body {
+    padding-top: 1rem;
+    background-color: #e7ecef;
+}

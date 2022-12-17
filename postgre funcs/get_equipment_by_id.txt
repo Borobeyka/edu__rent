@@ -1,0 +1,27 @@
+CREATE OR REPLACE FUNCTION get_equipment_by_id(
+	equipment_id integer
+)
+RETURNS TABLE (
+	id integer,
+	parent_id integer,
+	title varchar,
+	category_id integer,
+	description varchar,
+	images varchar[],
+	count integer,
+	category varchar,
+	parent_title varchar,
+	price_id integer,
+	price real
+) 
+AS $$
+DECLARE
+    statement TEXT;
+BEGIN
+	statement := format('SELECT e.*, c.title, ee.title, p.id price_id, p.price FROM equipments e LEFT JOIN categories c ON c.id = e.category_id
+						LEFT JOIN equipments ee ON ee.id = e.parent_id LEFT JOIN ( SELECT id, equipment_id, price FROM prices where equipment_id=%L
+						order by change_date DESC limit 1 ) p ON p.equipment_id = e.id WHERE e.id = %L;', equipment_id, equipment_id);
+	RETURN QUERY EXECUTE statement;
+END;
+$$ 
+LANGUAGE 'plpgsql';

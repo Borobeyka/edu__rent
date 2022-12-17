@@ -1,0 +1,24 @@
+CREATE OR REPLACE FUNCTION get_estimate_by_id(_estimate_id integer)
+RETURNS TABLE (
+	id integer,
+	creator_id integer,
+	client_id integer,
+	project varchar,
+	start_date timestamp,
+	close_date timestamp,
+	comment varchar,
+	payed_date timestamp,
+	is_payed boolean,
+	create_date timestamp,
+	creator_login varchar
+) 
+AS $$
+DECLARE
+    statement TEXT;
+BEGIN
+	statement := format('SELECT e.*, u.login  FROM estimates e LEFT JOIN users u ON u.id = e.creator_id WHERE e.id = %L', _estimate_id);
+	
+	RETURN QUERY EXECUTE statement;
+END;
+$$ 
+LANGUAGE 'plpgsql';

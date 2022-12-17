@@ -1,0 +1,102 @@
+{% extends "/layout.htm" %}
+
+{% block title %}
+    Склад
+{% endblock %}
+
+{% block body %}
+
+    <h3>Склад</h3><hr>
+
+    <h5>Поиск</h5>
+    <form action="" method="POST">
+        {{ search.hidden_tag() }}
+        <div class="row mb-3">
+            <div class="col-3">
+                {{ search.category_id(class='form-control form-control-sm') }}
+            </div>
+            <div class="col">
+                {{ search.query(class='form-control form-control-sm') }}
+            </div>
+            <div class="col-3 d-flex align-items-end text-center">
+                {{ search.search_submit(class='btn btn-success btn-sm px-5 w-100 me-2') }}
+                <a href="{{ url_for('storage') }}" class="btn btn-primary px-4 btn-sm">Сбросить</a>
+            </div>
+        </div>
+    </form>
+    
+    <hr>
+    <a href="{{ url_for('storage_create') }}" class="btn btn-primary btn-sm mb-3">
+        <i class="bi bi-file-earmark-plus text-light me-1"></i>
+        Добавить оборудование
+    </a>
+
+    <table class="table table-bordered table-hover table-striped">
+        <thead>
+            <tr>
+                <!-- ДОБАВЛЕНИЕ В СМЕТУ -->
+                {% if request.args.get("is_estimate") %}
+                    <th></th>
+                {% endif %}
+                <th scope="col" style="font-size:.8rem">Название</th>
+                <th scope="col" style="font-size:.8rem">Категория</th>
+                <th scope="col" style="font-size:.8rem">Описание</th>
+                <th scope="col" style="font-size:.8rem">Устанавливается на</th>
+                <th scope="col" style="font-size:.8rem">В наличии (шт.)</th>
+                <th scope="col" style="font-size:.8rem">Стоимость / сут (₽)</th>
+                <th scope="col" style="font-size:.8rem">Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if equipments: %}
+                {% for equipment in equipments: %}
+                <tr>
+                    <!-- ДОБАВЛЕНИЕ В СМЕТУ -->
+                    {% if request.args.get("is_estimate") %}
+                        <td>
+                            <a href="{{ url_for('estimates_create', equipment_id=equipment.id) }}" class="btn btn-success btn-sm" title="Добавить в смету">
+                                <i class="bi bi-clipboard2-plus light"></i>
+                            </a>
+                        </td>
+                    {% endif %}
+                    
+                    
+ 
+                    <td>
+                        <a href="{{ url_for('storage_show', equipment_id=equipment.id) }}" class="link-primary" style="font-size:.8rem"> 
+                            {{ equipment.title }}
+                        </a>
+                    </td>
+                    <td style="font-size:.8rem">{{ equipment.category }}</td>
+                    <td class="text-truncate" style="max-width: 200px; font-size:.8rem">
+                        {% if equipment.description %}
+                            {{ equipment.description }}
+                        {% endif %}
+                    </td>
+                    <td class="text-truncate" style="max-width: 200px;">
+                        {% if equipment.parent_id %}
+                            <a href="{{ url_for('storage_show', equipment_id=equipment.id) }}" class="link-primary" style="font-size:.8rem">
+                                {{ equipment.parent_title }}
+                            </a>
+                        {% endif %}
+                    </td>
+                    <td style="font-size:.8rem">{{ equipment.count }}</td>
+                    <td style="font-size:.8rem">{{ equipment.price }}</td>
+                    <td class="text-center">
+                        <a href="{{ url_for('storage_show', equipment_id=equipment.id) }}" class="btn btn-success btn-sm" title="Просмотр">
+                            <i class="bi bi-eye light"></i>
+                        </a>
+                        <a href="{{ url_for('storage_edit', equipment_id=equipment.id) }}" class="btn btn-primary btn-sm" title="Редактирование">
+                            <i class="bi bi-pencil-square light"></i>
+                        </a>
+                        <a href="#" class="btn btn-danger btn-sm" title="Удалить">
+                            <i class="bi bi-x-lg light"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
+
+{% endblock %}

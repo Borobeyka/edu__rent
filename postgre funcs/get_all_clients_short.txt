@@ -1,0 +1,12 @@
+CREATE OR REPLACE FUNCTION get_all_clients_short()
+    RETURNS TABLE(id integer, name character varying, surname character varying) 
+    LANGUAGE 'plpgsql'
+
+AS $BODY$
+BEGIN
+	RETURN QUERY EXECUTE 'SELECT id, name, surname FROM clients ORDER BY surname';
+END;
+$BODY$;
+
+ALTER FUNCTION public.get_all_clients_short()
+    OWNER TO postgres;

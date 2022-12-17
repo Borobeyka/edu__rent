@@ -1,0 +1,110 @@
+{% extends "/layout.htm" %}
+
+{% block title %}
+    Главная
+{% endblock %}
+
+{% block body %}
+    <h3>Сметы</h3><hr>
+    <h5>Фильтры</h5>
+
+    <form action="" method="POST">
+        {{ filter.hidden_tag() }}
+        <div class="row mb-2">
+            {% for field in filter if field.name not in ["csrf_token", "submit"] %}
+                <div class="col d-flex flex-column">
+                    {{ field.label(class='form-label text-center') }}
+                    {{ field(class='form-control form-control-sm') }}
+                </div>
+            {% endfor %}
+            <div class="col d-flex align-items-end text-center">
+                {{ filter.submit(class='btn btn-success px-5 btn-sm me-2') }}
+                <a href="{{ url_for('index') }}" class="btn btn-primary px-5 btn-sm">Сбросить</a>
+            </div>            
+        </div>
+    </form>
+
+    <hr>
+    <a href="{{ url_for('estimates_create') }}" class="btn btn-primary btn-sm mb-3">
+        <span class="bi bi-file-earmark-plus text-light me-1"></span>
+        Создать смету
+    </a>
+    
+    <table class="table table-bordered table-hover table-striped">
+        <thead>
+            <tr>
+                <th scope="col" style="font-size:.8rem">Дата создания</th>
+                <th scope="col" style="font-size:.8rem">Дата выдачи</th>
+                <th scope="col" style="font-size:.8rem">Дата возврата</th>
+                <th scope="col" style="font-size:.8rem">Клиент</th>
+                <th scope="col" style="font-size:.8rem">Составитель</th>
+                <th scope="col" style="font-size:.8rem">Проект</th>
+                <th scope="col" style="font-size:.8rem">Оплата</th>
+                <th scope="col" style="font-size:.8rem">Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if estimates: %}
+                {% for estimate in estimates: %}
+                <tr>
+                    <td style="font-size:.8rem">{{ estimate.create_date }}</td>
+                    <td style="font-size:.8rem">{{ estimate.start_date }}</td>
+                    <td style="font-size:.8rem">{{ estimate.close_date }}</td>
+                    <td>
+                        <a href="clients/{{ estimate.client_id }}/show" class="link-primary" style="font-size:.8rem">
+                            {{ estimate.client_surname }} {{ estimate.client_name }}
+                        </a>
+                    </td>
+                    <td style="font-size:.8rem">{{ estimate.creator_login }}</td>
+                    <td style="font-size:.8rem">{{ estimate.project }}</td>
+                    <td style="font-size:.8rem">
+                        {% if estimate.is_payed %}
+                            Оплачено
+                        {% else %}
+                            Не оплачено
+                        {% endif %}
+                    </td>
+                    <td class="text-center">
+                        <a href="{{ url_for('estimates_show', estimate_id=estimate.id) }}" class="btn btn-success btn-sm" title="Просмотр и редактирование">
+                            <i class="bi bi-eye light"></i>
+                        </a>
+                        <a href="#" class="btn btn-danger btn-sm" title="Удалить" data-bs-estimate-id={{estimate.id}} data-bs-toggle="modal" data-bs-target="#deleteModal">
+                            <i class="bi bi-x-lg light"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
+
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Удаление сметы</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Вы действительно хотите удалить смету?
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+              <button type="button" class="btn btn-danger">Удалить</button>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <script>
+        var deleteModal = document.getElementById('deleteModal')
+        deleteModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget
+            var estimate_id = button.getAttribute('data-bs-estimate-id')
+            console.log(estimate_id)
+            var modalButton = deleteModal.querySelector('.modal-footer .btn-danger')
+            var query = "location.href='/estimates/"+ estimate_id+ "/delete'"
+            modalButton.setAttribute("onclick", query);
+        })
+    </script>
+{% endblock %}

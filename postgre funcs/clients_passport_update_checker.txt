@@ -1,0 +1,15 @@
+CREATE FUNCTION clients_passport_update_checker()
+RETURNS trigger
+AS $$
+    BEGIN
+        IF (NEW.series = OLD.series AND NEW.number = OLD.number AND NEW.issued_by = OLD.issued_by AND
+			NEW.issue_date = OLD.issue_date AND NEW.division_code = OLD.division_code AND NEW.registration_address = OLD.registration_address) THEN
+            RAISE EXCEPTION 'Нет изменений для обновления';
+        END IF;
+        RETURN NEW;
+    END;
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER clients_passport_update_checker BEFORE INSERT OR UPDATE ON passports_data
+    FOR EACH ROW EXECUTE PROCEDURE clients_passport_update_checker();

@@ -1,0 +1,58 @@
+{% extends "/clients/layout.htm" %}
+
+{% block title %}
+    {{ client.surname }} {{ client.name }}
+{% endblock %}
+
+{% block clients_body %}
+    <div class="col">
+        {% for category, text in get_flashed_messages(True) %}
+            <div class="alert alert-{{ category }}">{{ text }}</div>  
+        {% endfor %}
+
+        <h4>Личная информация</h4><hr>
+        <form action="" method="POST" class="mb-5">
+            {{ personal.hidden_tag() }}
+            <div class="container">
+                <div class="row">
+                    {% for field in personal if field.name not in ["csrf_token", "personal_submit"] %}
+                        {% if field.errors %}
+                            {% for error in field.errors %}
+                                <div class="alert alert-danger" role="alert">{{ error }}</div>
+                            {% endfor %}
+                        {% endif %}
+                        <div class="col-6 mb-3 d-flex align-items-baseline">
+                            <div class="input-group">
+                                {{ field.label(class="input-group-text") }}
+                                {{ field(class="form-control") }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                {{ personal.personal_submit(class="btn btn-success w-100") }}
+            </div>
+        </form>
+        <h4>Паспортные данные</h4><hr>
+        <form action="" method="POST" class="mb-2">
+            {{ passport.hidden_tag() }}
+            <div class="container">
+                <div class="row">
+                    {% for field in passport if field.name not in ["csrf_token", "passport_submit"] %}
+                        {% if field.errors %}
+                            {% for error in field.errors %}
+                                <div class="alert alert-danger" role="alert">{{ error }}</div>
+                            {% endfor %}
+                        {% endif %}
+                        <div class="col-6 mb-3 d-flex align-items-baseline">
+                            <div class="input-group">
+                                {{ field.label(class="input-group-text") }}
+                                {{ field(class="form-control") }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                {{ passport.passport_submit(class="btn btn-success w-100") }}
+            </div>
+        </form>
+    </div>
+{% endblock %}
