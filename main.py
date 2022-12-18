@@ -103,7 +103,6 @@ def estimates_create():
             })
             db.create_estimate_details(item)
         equipments = []
-        # ! НЕ ЗАБЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫТЬ
         return redirect(url_for("estimates_create_reset",
             next=url_for("estimates_show", 
                 estimate_id=new_estimate.new_id
@@ -135,7 +134,8 @@ def estimates_payed(estimate_id):
 @register_breadcrumb(app, ".estimates.estimates_delete", "")
 @login_required
 def estimates_delete(estimate_id):
-    # ! ДОБАВИТЬ ПРОВЕРКУ НА АДМИНА
+    if not current_user.user.role in ["Owner"]:
+        return redirect(url_for("clients"))
     db.delete_estimate_by_id(estimate_id)
     return redirect(request.args.get("next") or url_for("index"))
 
@@ -171,7 +171,8 @@ def storage_show(equipment_id):
 @register_breadcrumb(app, ".storage.storage_create", "Добавление оборудования")
 @login_required
 def storage_create():
-    # ! ДОБАВИТЬ ПРОВЕРКУ НА АДМИНА
+    if not current_user.user.role in ["Owner"]:
+        return redirect(url_for("clients"))
     parents = db.get_equipments(DotMap({
         "category_id": -1,
         "query": None
@@ -210,7 +211,8 @@ def storage_create():
 @register_breadcrumb(app, ".storage.storage_edit", "", dynamic_list_constructor=storage_edit_dlc)
 @login_required
 def storage_edit(equipment_id):
-    # ! ДОБАВИТЬ ПРОВЕРКУ НА АДМИНА
+    if not current_user.user.role in ["Owner"]:
+        return redirect(url_for("clients"))
     equipment = db.get_equipment_by_id(equipment_id)
     parents = db.get_equipments(DotMap({
         "category_id": -1,
@@ -304,11 +306,12 @@ def clients_estimates(client_id):
         estimates=estimates
     )
 
-# ! ДОБАВИТЬ ДОСТУП ТОЛЬКО АДМИНУ
 @app.route("/clients/create", methods=["POST", "GET"])
 @register_breadcrumb(app, ".clients.create", "Добавление клиента")
 @login_required
 def clients_create():
+    if not current_user.user.role in ["Owner"]:
+        return redirect(url_for("clients"))
     form = FormClientsCreate()
     if form.validate_on_submit() and form.create_submit.data:
         data = DotMap({
@@ -348,7 +351,6 @@ def user_logout():
         return redirect(url_for("user_auth"))
     return redirect(url_for("user_auth"))
 
-# ! ДОБАВИТЬ ДОБАВЛЕНИ ПОЛЬЗОВАТЕЛЯ ДЛЯ АДМИНА
 @app.route("/user/auth", methods=["POST", "GET"])
 @register_breadcrumb(app, ".user_auth", "Авторизация")
 def user_auth():
