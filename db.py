@@ -4,7 +4,6 @@ from dotmap import DotMap
 
 def convert(data):
     a = []
-    print(data)
     if isinstance(data, RealDictRow):
         return DotMap(data)
     for item in data:

@@ -2,7 +2,7 @@ users:
     id
     login ( 32 )
     password ( 256 )
-    role ??
+    role ( NULL, "Storer" )
 
 clients:
     id
