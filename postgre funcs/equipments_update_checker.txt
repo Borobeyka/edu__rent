@@ -3,7 +3,7 @@ RETURNS trigger
 AS $$
     BEGIN
         IF (NEW.title = OLD.title AND NEW.parent_id = OLD.parent_id AND NEW.category_id = OLD.category_id AND
-			NEW.description = OLD.description) THEN
+			NEW.description = OLD.description AND NEW.count = OLD.count) THEN
             RAISE EXCEPTION 'Нет изменений для обновления';
         END IF;
         RETURN NEW;

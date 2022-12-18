@@ -50,6 +50,8 @@ class DB():
             (data.parent_id, data.title, data.category_id, data.description, data.images))
         self.db.commit()
         response = self.cursor.fetchone()
+        self.cursor.execute("INSERT INTO prices VALUES (DEFAULT, %s, %s, DEFAULT)",
+            (response.get("new_id"), data.price))
         if not response:
             return False
         return convert(response)

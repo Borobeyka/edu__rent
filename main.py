@@ -202,12 +202,9 @@ def storage_create():
             "category_id": form.category_id.data,
             "description": form.description.data if len(form.description.data) != 0 else None,
             "images": [ url for url in urls ],
-            "count": 1,
             "price": form.price.data
         })
         equipment = db.create_equipment(data)
-        data.equipment_id = equipment.new_id
-        db.equipments_update(data)
         return redirect(url_for("storage_show", equipment_id=equipment.new_id))
     return render_template("storage/create.htm", 
         form=form
@@ -237,7 +234,6 @@ def storage_edit(equipment_id):
             "count": form.count.data
         })
         try:
-            print(data)
             db.equipments_update(data)
             flash("Данные оборудования обновлены", "success")
             return redirect(url_for("storage_show", equipment_id=equipment_id))
