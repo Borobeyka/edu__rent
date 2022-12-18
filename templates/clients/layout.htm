@@ -1,7 +1,12 @@
 {% extends "/layout.htm" %}
 
 {% block body %}
-    <h3>{{ client.surname }} {{ client.name }}</h3>
+    <h3>
+        {% if client.surname %}
+            {{ client.surname }}
+        {% endif %}
+        {{ client.name }}
+    </h3>
     <hr>
     <div class="row">
         <div class="col-3">

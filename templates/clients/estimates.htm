@@ -41,9 +41,11 @@
                             <a href="/estimates/{{ estimate.id }}/show" class="btn btn-success btn-sm" title="Просмотр и редактирование">
                                 <i class="bi bi-eye light"></i>
                             </a>
-                            <a href="#" class="btn btn-danger btn-sm" title="Удалить" data-bs-estimate-id={{estimate.id}} data-bs-toggle="modal" data-bs-target="#deleteModal">
-                                <i class="bi bi-x-lg light"></i>
-                            </a>
+                            {% if user.role == "Owner" %}
+                                <a href="#" class="btn btn-danger btn-sm" title="Удалить" data-bs-estimate-id={{estimate.id}} data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                    <i class="bi bi-x-lg light"></i>
+                                </a>
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}

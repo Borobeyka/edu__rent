@@ -180,6 +180,8 @@ def storage_create():
     categories = db.get_categories_tree()
     form = FormStorageCreate(parents if parents else DotMap(), categories)
     if form.validate_on_submit():
+        if request.view_args["equipment_id"]:
+            request.view_args["equipment_id"] = None
         urls = []
         files = request.files.getlist("files")
         for f in files:

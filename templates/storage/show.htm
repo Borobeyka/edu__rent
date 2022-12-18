@@ -64,8 +64,10 @@
         <i class="bi bi-clipboard2-plus light"></i>
         Добавить в смету
     </a>
-    <a href="{{ url_for('storage_edit', equipment_id=equipment.id) }}" class="btn btn-secondary mb-3">
-        <i class="bi bi-pencil-square light"></i>
-        Редактировать
-    </a>
+    {% if user.role == "Owner" %}
+        <a href="{{ url_for('storage_edit', equipment_id=equipment.id) }}" class="btn btn-secondary mb-3">
+            <i class="bi bi-pencil-square light"></i>
+            Редактировать
+        </a>
+    {% endif %}
 {% endblock %}

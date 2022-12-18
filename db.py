@@ -50,7 +50,7 @@ class DB():
             (data.parent_id, data.title, data.category_id, data.description, data.images))
         self.db.commit()
         response = self.cursor.fetchone()
-        self.cursor.execute("INSERT INTO prices VALUES (DEFAULT, %s, %s, DEFAULT)",
+        self.cursor.execute("INSERT INTO prices VALUES (DEFAULT, %s, %s, DEFAULT); commit;",
             (response.get("new_id"), data.price))
         if not response:
             return False
@@ -115,6 +115,8 @@ class DB():
             (data.name, data.surname, data.phone, data.telegram, data.comment, data.discount))
         self.db.commit()
         response = self.cursor.fetchone()
+        self.cursor.execute("INSERT INTO passports_data (client_id) VALUES (%s); commit;",
+            (response.get("new_id"),))
         if not response:
             return False
         return convert(response)

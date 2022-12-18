@@ -33,14 +33,16 @@
     </form>
     <hr>
 
-    <div class="row mb-3">
-        <div class="col">
-            <a href="{{ url_for('clients_create') }}" class="btn btn-primary btn-sm">
-                <i class="bi bi-file-earmark-plus text-light me-1"></i>
-                Добавить клиента
-            </a>
+    {% if user.role == "Owner" %}
+        <div class="row mb-3">
+            <div class="col">
+                <a href="{{ url_for('clients_create') }}" class="btn btn-primary btn-sm">
+                    <i class="bi bi-file-earmark-plus text-light me-1"></i>
+                    Добавить клиента
+                </a>
+            </div>
         </div>
-    </div>
+    {% endif %}
     
 
     <table class="table table-bordered table-hover table-striped">

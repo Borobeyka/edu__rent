@@ -1,7 +1,10 @@
 {% extends "/clients/layout.htm" %}
 
 {% block title %}
-    {{ client.surname }} {{ client.name }}
+    {% if client.surname %}
+        {{ client.surname }}
+    {% endif %}
+    {{ client.name }}
 {% endblock %}
 
 {% block clients_body %}

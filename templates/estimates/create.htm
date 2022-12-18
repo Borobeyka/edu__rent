@@ -63,7 +63,7 @@
                         </td style="font-size:.8rem">
                         <td class="text-truncate" style="max-width: 200px">
                             {% if equipment.item.parent_id %}
-                                <a href="#" class="link-primary" style="font-size:.8rem">
+                                <a href="{{ url_for('storage_show', equipment_id=equipment.item.parent_id) }}" class="link-primary" style="font-size:.8rem">
                                     {{ equipment.item.parent_title }}
                                 </a>
                             {% endif %}

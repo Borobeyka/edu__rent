@@ -26,10 +26,12 @@
     </form>
     
     <hr>
-    <a href="{{ url_for('storage_create') }}" class="btn btn-primary btn-sm mb-3">
-        <i class="bi bi-file-earmark-plus text-light me-1"></i>
-        Добавить оборудование
-    </a>
+    {% if user.role == "Owner" %}
+        <a href="{{ url_for('storage_create') }}" class="btn btn-primary btn-sm mb-3">
+            <i class="bi bi-file-earmark-plus text-light me-1"></i>
+            Добавить оборудование
+        </a>
+    {% endif %}
 
     <table class="table table-bordered table-hover table-striped">
         <thead>
@@ -86,9 +88,11 @@
                         <a href="{{ url_for('storage_show', equipment_id=equipment.id) }}" class="btn btn-success btn-sm" title="Просмотр">
                             <i class="bi bi-eye light"></i>
                         </a>
-                        <a href="{{ url_for('storage_edit', equipment_id=equipment.id) }}" class="btn btn-primary btn-sm" title="Редактирование">
-                            <i class="bi bi-pencil-square light"></i>
-                        </a>
+                        {% if user.role == "Owner" %}    
+                            <a href="{{ url_for('storage_edit', equipment_id=equipment.id) }}" class="btn btn-primary btn-sm" title="Редактирование">
+                                <i class="bi bi-pencil-square light"></i>
+                            </a>
+                        {% endif %}
                     </td>
                 </tr>
                 {% endfor %}

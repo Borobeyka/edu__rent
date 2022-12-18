@@ -26,6 +26,7 @@
             Комментарий отсутсвует
         {% endif %}
     <br>
+    <b>Составитель:</b> {{ estimate.creator_login }} <br>
     <b>Статус сметы:</b>
     {% if estimate.is_payed %}
         <label class="btn btn-success btn-sm">Оплачена</label><br>
