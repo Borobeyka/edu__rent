@@ -1,0 +1,14 @@
+CREATE VIEW "get_categories" as
+with recursive top_down as (
+	select id, parent_id, title, title::varchar as path, 1 as depth
+	from categories
+	where parent_id is null
+
+union all
+
+	select t.id, t.parent_id, t.title, concat(path, ' > ', t.title), depth + 1
+	from categories t
+
+	join top_down r on t.parent_id = r.id
+)
+select * from top_down order by path, depth

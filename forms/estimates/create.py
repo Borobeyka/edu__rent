@@ -9,7 +9,7 @@ def FormEstimatesCreate(clients):
             [(client.id, client.surname + " " + client.name) for client in clients]
         client_id = SelectField("Клиент", choices=choices)
         project = StringField("Проект")
-        start_date = DateTimeLocalField("Дата выдачи", format="%Y-%m-%dT%H:%M", default=datetime.today)
+        start_date = DateTimeLocalField("Дата выдачи", format="%Y-%m-%dT%H:%M")
         close_date = DateTimeLocalField("Дата возврата", format="%Y-%m-%dT%H:%M")
         comment = TextAreaField("Комментарий")
         create_submit = SubmitField("Создать смету")

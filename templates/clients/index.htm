@@ -86,9 +86,6 @@
                             <b>{{ client.active_estimates }}</b> из {{ client.total_estimates }}
                         </td>
                         <td class="text-center">
-                            <a href="/estimates/create" title="Создать смету" class="btn btn-success btn-sm">
-                                <i class="bi bi-journal-plus light"></i>
-                            </a>
                             <a href="{{ url_for('clients_estimates', client_id=client.id) }}" title="Сметы" class="btn btn-primary btn-sm">
                                 <i class="bi bi-journal-text light"></i>
                             </a>
