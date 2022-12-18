@@ -178,7 +178,7 @@ def storage_create():
         "query": None
     }))
     categories = db.get_categories_tree()
-    form = FormStorageCreate(parents, categories)
+    form = FormStorageCreate(parents if parents else DotMap(), categories)
     if form.validate_on_submit():
         urls = []
         files = request.files.getlist("files")
@@ -225,18 +225,19 @@ def storage_edit(equipment_id):
         "query": None
     }))
     categories = db.get_categories_tree()
-    form = FormStorageEdit(parents, categories, equipment)
+    form = FormStorageEdit(parents if parents else DotMap(), categories, equipment)
     if form.validate_on_submit():
         data = DotMap({
             "equipment_id": equipment_id,
             "title": form.title.data,
-            "parent_id": form.parent_id.data,
+            "parent_id": form.parent_id.data if form.parent_id.data != "-1" else None,
             "category_id": form.category_id.data,
             "description": form.description.data,
             "price": form.price.data,
             "count": form.count.data
         })
         try:
+            print(data)
             db.equipments_update(data)
             flash("Данные оборудования обновлены", "success")
             return redirect(url_for("storage_show", equipment_id=equipment_id))
