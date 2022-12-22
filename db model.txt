@@ -62,17 +62,8 @@ estimates_details:
     price_id
     count ( NULL , 1 )
 
-
-
-
-
-
-
-
-
 CREATE ROLE Owner LOGIN;
 CREATE ROLE Storer LOGIN;
-
 
 # For SELECT
 GRANT SELECT ON
@@ -116,3 +107,18 @@ GRANT DELETE ON
     estimates,
     estimates_details
 TO Owner;
+
+GRANT EXECUTE ON FUNCTION get_client_by_id TO Owner, Storer;
+GRANT EXECUTE ON FUNCTION create_client TO Owner;
+GRANT EXECUTE ON FUNCTION get_all_clients_short TO Owner, Storer;
+GRANT EXECUTE ON FUNCTION get_all_clients_details TO Owner, Storer;
+GRANT EXECUTE ON FUNCTION create_estimate to Owner, Storer;
+GRANT EXECUTE ON FUNCTION get_equipment_by_id to Owner, Storer;
+GRANT EXECUTE ON FUNCTION create_equipment to Owner;
+GRANT EXECUTE ON FUNCTION get_equipments to Owner, Storer;
+GRANT EXECUTE ON FUNCTION get_estimate_by_id TO Owner, Storer;
+GRANT EXECUTE ON FUNCTION get_filtered_estimates to Owner, Storer;
+GRANT EXECUTE ON FUNCTION get_estimate_details_by_id to Owner, Storer;
+GRANT EXECUTE ON FUNCTION get_categories_tree TO Owner, Storer;
+
+GRANT EXECUTE ON PROCEDURE create_estimate_details TO Owner, Storer;
