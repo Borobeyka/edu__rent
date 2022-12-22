@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, TelField, TextAreaField, DateField
+from wtforms import StringField, SubmitField, DateField
 from wtforms.validators import Length
 
 def FormClientsPassport(client):

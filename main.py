@@ -13,6 +13,7 @@ import requests
 import base64
 import os
 
+
 imgbb_key = "c31a8b1bd295a75db042e6d001228034"
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "9d3fc4c15037cf54e9e6ca948d99dda7f1823d1d"

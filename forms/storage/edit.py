@@ -1,7 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms.validators import Length, NumberRange
 from wtforms import SubmitField, SelectField, StringField, TextAreaField, IntegerField
-from flask_wtf.file import FileField, FileAllowed
 
 def FormStorageEdit(parents, categories, equipment):
     class _FormStorageEdit(FlaskForm):

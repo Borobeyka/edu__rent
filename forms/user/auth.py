@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField
-from wtforms.validators import Email, Length
+from wtforms.validators import Length
 
 class FormUserAuth(FlaskForm):
     login = StringField("Логин:", validators=[Length(4, -1, "Логин не может быть короче 4 символов")])
