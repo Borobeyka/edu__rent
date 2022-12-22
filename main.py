@@ -7,6 +7,7 @@ from breadcrumbs_dlc import *
 from user_login import *
 from dotmap import DotMap
 from db import *
+
 import psycopg2
 import requests
 import base64
@@ -15,7 +16,6 @@ import os
 imgbb_key = "c31a8b1bd295a75db042e6d001228034"
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "9d3fc4c15037cf54e9e6ca948d99dda7f1823d1d"
-app.config["UPLOAD_FOLDER"] = "/uploads/"
 app.jinja_env.trim_blocks = True
 Menu(app=app)
 Breadcrumbs(app=app)
@@ -389,7 +389,6 @@ def close_db(error):
         g.link_db.close()
 
 def connect_db():
-    # ! ВНЕСТИ ИЗМЕНЕНИЯ (ИЗМЕНИТЬ ПОЛЬЗОВАТЕЛЯ)
     return psycopg2.connect("dbname=rent user=postgres password=1234 host=localhost")
 
 def get_db():
